@@ -1,0 +1,217 @@
+public class LinkedListNode {
+
+    int value;
+    LinkedListNode next;
+
+	public int getValue() {
+		return value;
+	}
+
+	public LinkedListNode getNext() {
+		return next;
+	}
+
+}
+
+public class MySpecialLinkedListUtils {
+
+	// 1
+	public static double[] summary(LinkedListNode head) {
+
+		double[] summary = new double[5];
+		double sum = 0.0;
+		int count = 0;
+		for (LinkedListNode i = head; i != null; i = i.next) {
+			sum += i.value;
+			count++;
+		}
+		double average = sum / count;
+		int[] array = new int[count];
+		int j = 0;
+		for (LinkedListNode i = head; i != null; i = i.next) {
+			if (j < count) {
+				array[j] = i.value;
+				j++;
+			}
+		}
+		for (int l = 0; l < count; l++) {
+			int min = array[l];
+			int min_index = l;
+			for (int k = l; k < count; k++) {
+				if (array[k] < min) {
+					min = array[k];
+					min_index = k;
+				}
+			}
+			int temp = array[l];
+			array[l] = array[min_index];
+			array[min_index] = temp;
+		}
+		double median = 0;
+		if (count % 2 == 0) {
+			median = (array[count / 2] + array[(count / 2) - 1]) / 2.0;
+		} else {
+			median = array[count / 2];
+		}
+		double maximum = array[count - 1];
+		double minimum = array[0];
+
+		summary[0] = sum;
+		summary[1] = average;
+		summary[2] = median;
+		summary[3] = maximum;
+		summary[4] = minimum;
+		return summary;
+	}
+
+	// 2
+	public static LinkedListNode reverse(LinkedListNode head) {
+
+		LinkedListNode current = head;
+		LinkedListNode prev = null;
+		LinkedListNode next = null;
+		while (current != null) {
+			next = current.next;
+			current.next = prev;
+			prev = current;
+			current = next;
+		}
+		return prev;
+	}
+
+	// 3
+	public static LinkedListNode evenIndexedElements(LinkedListNode head) {
+
+		int count = 0;
+		for (LinkedListNode i = head; i != null; i = i.next) {
+			count++;
+		}
+		LinkedListNode n = head;
+		if (count % 2 == 0) {
+			for (n = head; n != null; n = n.next) {
+				n.next = n.next.next;
+			}
+		} else {
+			for (n = head; n != null; n = n.next) {
+				n.next = n.next.next;
+			}
+		}
+
+		return head;
+	}
+
+	// 4
+	public static LinkedListNode insertionSort(LinkedListNode head) {
+
+		LinkedListNode current = head;
+		while (current != null) {
+			for (LinkedListNode next = current; next.next != null; next = next.next) {
+				if (next.value >= next.next.value) {
+					int temp = next.value;
+					next.value = next.next.value;
+					next.next.value = temp;
+				}
+			}
+			current = current.next;
+		}
+		return head;
+	}
+
+	// 5
+	public static LinkedListNode middleNode(LinkedListNode head) {
+
+		if (head == null) {
+			return null;
+		}
+		LinkedListNode a = head;
+		LinkedListNode b = head.next;
+		while (b != null && b.next != null) {
+			a = a.next;
+			b = b.next.next;
+		}
+		return a;
+	}
+
+	public static LinkedListNode mergeSort(LinkedListNode head) {
+
+		if (head == null || head.next == null) {
+			return head;
+		}
+		LinkedListNode middle = middleNode(head);
+		LinkedListNode secondHalf = middle.next;
+
+		return merge(mergeSort(head), mergeSort(secondHalf));
+	}
+
+	public static LinkedListNode merge(LinkedListNode a, LinkedListNode b) {
+
+		LinkedListNode temp = new LinkedListNode();
+		LinkedListNode finalList = temp;
+
+		while (a != null && b != null) {
+			if (a.value < b.value) {
+				temp.next = a;
+				a = a.next;
+			} else {
+				temp.next = b;
+				b = b.next;
+			}
+			temp = temp.next;
+		}
+		temp.next = (a == null) ? b : a;
+		return finalList.next;
+	}
+
+	// 6
+	public static LinkedListNode removeCentralNode(LinkedListNode head) {
+
+		int count = 0;
+		for (LinkedListNode i = head; i != null; i = i.next) {
+			count++;
+		}
+		LinkedListNode n = head;
+		if (count % 2 == 0) {
+			for (int i = 0; i < (count / 2 - 2); i++) {
+				n = n.next;
+			}
+			n.next = n.next.next.next;
+		} else {
+			for (int i = 0; i < (count / 2 - 1); i++) {
+				n = n.next;
+			}
+			n.next = n.next.next;
+		}
+		return head;
+	}
+
+	// 7
+	public static boolean palindrome(LinkedListNode head) {
+
+		int count = 0;
+		for (LinkedListNode i = head; i != null; i = i.next) {
+			count++;
+		}
+		int[] array = new int[count];
+		int[] revArray = new int[count];
+		int j = 0;
+		for (LinkedListNode i = head; i != null; i = i.next) {
+			if (j < count) {
+				array[j] = i.value;
+				revArray[count - 1 - j] = i.value;
+				j++;
+			}
+		}
+		String s = "";
+		String x = "";
+		for (int k = 0; k < count; k++) {
+			s += array[k];
+			x += revArray[k];
+		}
+		if (s.equals(x)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+}
